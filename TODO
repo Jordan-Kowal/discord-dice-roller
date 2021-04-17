@@ -1,0 +1,16 @@
+# TODO
+
+### General
+- Add logging
+
+### Roll
+- Add `reroll` command
+
+### Utility
+- Add the `help` command
+- Add the `ping` command
+- Add the `purge` command (delete previous messages)
+- Add the `info` command (top.gg link, github, etc.)
+
+### Start
+- Add feedback on boot
