@@ -1,8 +1,10 @@
 """Commands related to rolling the dice"""
 
 # Third-party
-from discord import Color
 from discord.ext import commands
+
+# Application
+from discord_dice_roller.utils.cog import ImprovedCog
 
 # Local
 from .dice_roll import DiceRoll
@@ -11,18 +13,10 @@ from .dice_roll import DiceRoll
 # --------------------------------------------------------------------------------
 # > Cog
 # --------------------------------------------------------------------------------
-class DiceRollingCog(commands.Cog):
+class DiceRollingCog(ImprovedCog):
     """Provides commands to roll dice with various options"""
 
     last_roll_per_user = {}
-    default_error_message = "Oops, something went wrong! :("
-
-    def __init__(self, bot):
-        """
-        Initializes the instance
-        :param discord.ext.commands.Bot bot:
-        """
-        self.bot = bot
 
     @commands.command()
     async def roll(self, ctx, *args):
@@ -36,10 +30,8 @@ class DiceRollingCog(commands.Cog):
 
     @roll.error
     async def roll_error(self, ctx, error):
-        """Error handler for `roll`"""
-        # TODO: Log errors
-        print(error)
-        await ctx.send(self.default_error_message)
+        """Base error handler for the !roll command"""
+        await self.log_error_and_apologize(ctx, error)
 
     # @commands.command()
     # async def reroll(self, ctx, *args):

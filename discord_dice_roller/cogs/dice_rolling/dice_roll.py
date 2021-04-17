@@ -256,13 +256,18 @@ class DiceRoll:
         dice_per_sides = {}
         for die in self.dice:
             existing_list = dice_per_sides.get(die.sides, [])
-            existing_list.append(str(die.value))
+            existing_list.append(die.value)
             dice_per_sides[die.sides] = existing_list
         lines = []
+        total_score = 0
         for sides, values in dice_per_sides.items():
-            line = f"[{len(values)}d{sides}]({', '.join(values)})"
+            line_score = sum(values)
+            total_score += line_score
+            string_values = [str(v) for v in values]
+            line = f"[{len(values)}d{sides}]({', '.join(string_values)}) = {line_score}"
             lines.append(line)
+        lines.append(f"# {total_score}")
         text = generate_discord_markdown_string(lines)
         embed.add_field(
-            name="Dice rolls", value=text, inline=False,
+            name=f"Dice rolls", value=text, inline=False,
         )
