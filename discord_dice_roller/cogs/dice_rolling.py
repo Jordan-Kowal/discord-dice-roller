@@ -1,13 +1,12 @@
 """Commands related to rolling the dice"""
 
 # Third-party
-from discord import Color
 from discord.ext import commands
 
 # Application
 from discord_dice_roller.utils.cog import ImprovedCog
 from discord_dice_roller.utils.dice_roll import DiceRoll
-from discord_dice_roller.utils.embed import create_embed
+from discord_dice_roller.utils.embed import create_error_embed
 
 
 # --------------------------------------------------------------------------------
@@ -39,11 +38,8 @@ class DiceRollingCog(ImprovedCog):
         user_id = ctx.message.author.id
         last_dice_roll = self.last_roll_per_user.get(user_id, None)
         if last_dice_roll is None:
-            embed_output = create_embed(
-                title="Woopsie! :(",
-                description="You have yet to send one valid `!roll` command",
-                color=Color.red(),
-            )
+            description = "You have yet to send one valid `!roll` command"
+            embed_output = create_error_embed(description=description)
         else:
             dice_roll = last_dice_roll.copy()
             embed_output = dice_roll.roll()

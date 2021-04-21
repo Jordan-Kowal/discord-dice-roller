@@ -4,11 +4,10 @@
 import logging
 
 # Third-party
-from discord import Color
 from discord.ext import commands
 
 # Local
-from .embed import create_embed
+from .embed import create_error_embed
 
 
 # --------------------------------------------------------------------------------
@@ -34,9 +33,8 @@ class ImprovedCog(commands.Cog):
         """
         message = f"!{ctx.command} {error} "
         logging.error(message)
-        embed = create_embed(
+        embed = create_error_embed(
             title=self.default_error_message,
             description="Check the logs or contact your administrator for more info",
-            color=Color.red(),
         )
         await ctx.send(embed=embed)

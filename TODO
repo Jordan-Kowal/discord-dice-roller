@@ -2,6 +2,7 @@
 
 ### General
 - Update thumbnail
+- Also log in console
 - Add INFO log at the start of each command
 - Add README.md
 - Add Versioning somewhere
@@ -9,13 +10,12 @@
 
 ### Rolling
 - Update reroll with JSON
-- `sr` shortcut roll
+- `use` shortcut roll
 - Add `--short` option
-- `setroll [shortcut] [instructions]` per user ID (user_settings.json)
-- `getroll` per user ID (user_settings.json)
-- `getrolls` per user ID (user_settings.json)
-- `removeroll`
-- `removeallrolls`
+
+### Settings
+- `remove`
+- `removeall`
 
 ### Utility
 - Add the `help` command
