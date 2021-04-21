@@ -1,10 +1,12 @@
 """Commands related to rolling the dice"""
 
 # Third-party
+from discord import Color
 from discord.ext import commands
 
 # Application
 from discord_dice_roller.utils.cog import ImprovedCog
+from discord_dice_roller.utils.embed import create_embed
 
 # Local
 from .dice_roll import DiceRoll
@@ -33,21 +35,23 @@ class DiceRollingCog(ImprovedCog):
         """Base error handler for the !roll command"""
         await self.log_error_and_apologize(ctx, error)
 
-    # @commands.command()
-    # async def reroll(self, ctx, *args):
-    #     """Rolls the dice using the player's last VALID instructions"""
-    #     user_id = ctx.message.author.id
-    #     last_dice_roll = self.last_dice_roll_per_user.get(user_id, None)
-    #     if last_dice_roll is None:
-    #         output = "You have yet to send one valid `!roll` command"
-    #     else:
-    #         dice_roll = last_dice_roll.copy()
-    #         _, output = dice_roll.roll()
-    #     await ctx.send(output)
-    #
-    # @reroll.error
-    # async def reroll_error(self, ctx, error):
-    #     """Error handler for `reroll`"""
-    #     # TODO: Log errors
-    #     print(error)
-    #     await ctx.send(self.default_error_message)
+    @commands.command()
+    async def reroll(self, ctx, *args):
+        """Rolls the dice using the player's last VALID instructions"""
+        user_id = ctx.message.author.id
+        last_dice_roll = self.last_roll_per_user.get(user_id, None)
+        if last_dice_roll is None:
+            embed_output = create_embed(
+                title="Woopsie! :(",
+                description="You have yet to send one valid `!roll` command",
+                color=Color.red(),
+            )
+        else:
+            dice_roll = last_dice_roll.copy()
+            embed_output = dice_roll.roll()
+        await ctx.send(embed=embed_output)
+
+    @reroll.error
+    async def reroll_error(self, ctx, error):
+        """Error handler for `reroll`"""
+        await self.log_error_and_apologize(ctx, error)

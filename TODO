@@ -2,15 +2,27 @@
 
 ### General
 - Update thumbnail
+- Add INFO log at the start of each command
+- Add README.md
+- Add Versioning somewhere
+- Add CHANGELOG.md
 
-### Roll
-- Add `reroll` command
+### Rolling
+- Update reroll with JSON
+- `sr` shortcut roll
+- Add `--short` option
+- `setroll [shortcut] [instructions]` per user ID (user_settings.json)
+- `getroll` per user ID (user_settings.json)
+- `getrolls` per user ID (user_settings.json)
+- `removeroll`
+- `removeallrolls`
 
 ### Utility
 - Add the `help` command
-- Add the `ping` command
-- Add the `purge` command (delete previous messages)
 - Add the `info` command (top.gg link, github, etc.)
+- `setprefix [value]` per guild ID (guild_settings.json)
+- `getprefix` per guild ID (guild_settings.json)
+- Test using 2 servers
 
 ### Start
 - Add feedback on boot

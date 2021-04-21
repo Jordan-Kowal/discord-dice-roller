@@ -94,7 +94,7 @@ class DiceRoll:
         """
         description = "\n".join(self.errors)
         return create_embed(
-            title="Woopsie :(", description=description, color=Color.red(),
+            title="Woopsie! :(", description=description, color=Color.red(),
         )
 
     @property
@@ -132,6 +132,13 @@ class DiceRoll:
             component.apply()
         self.rolled = True
         return self.result_as_embed
+
+    def copy(self):
+        """
+        :return: A new DiceRoll using our instance's instructions
+        :rtype: DiceRoll
+        """
+        return DiceRoll(self.instructions)
 
     # ----------------------------------------
     # Helpers: parsing
