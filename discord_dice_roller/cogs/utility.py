@@ -2,6 +2,7 @@
 
 
 # Built-in
+import os
 import time
 
 # Third-party
@@ -9,7 +10,6 @@ from discord import Color
 from discord.ext import commands
 
 # Application
-from discord_dice_roller.cogs.utility.clear import should_delete, validate_clear_args
 from discord_dice_roller.utils.cog import ImprovedCog
 from discord_dice_roller.utils.embed import create_embed
 
@@ -20,6 +20,9 @@ from discord_dice_roller.utils.embed import create_embed
 class UtilityCog(ImprovedCog):
     """Provides utility commands to assist our users"""
 
+    # ----------------------------------------
+    # Help
+    # ----------------------------------------
     @commands.command()
     async def help(self, ctx, *args):
         """TBD"""
@@ -30,6 +33,9 @@ class UtilityCog(ImprovedCog):
         """Base error handler for the !help command"""
         await self.log_error_and_apologize(ctx, error)
 
+    # ----------------------------------------
+    # info
+    # ----------------------------------------
     @commands.command()
     async def info(self, ctx, *args):
         """TBD"""
@@ -40,6 +46,9 @@ class UtilityCog(ImprovedCog):
         """Base error handler for the !info command"""
         await self.log_error_and_apologize(ctx, error)
 
+    # ----------------------------------------
+    # ping
+    # ----------------------------------------
     @commands.command()
     async def ping(self, ctx, *args):
         """Checks if the bot is up"""
@@ -51,10 +60,13 @@ class UtilityCog(ImprovedCog):
         """Base error handler for the !ping command"""
         await self.log_error_and_apologize(ctx, error)
 
+    # ----------------------------------------
+    # clear
+    # ----------------------------------------
     @commands.command()
     async def clear(self, ctx, *args):
         """Checks the last N messages in the channel and remove both commands and bot messages"""
-        is_valid, limit, error_message = validate_clear_args(*args)
+        is_valid, limit, error_message = self._validate_clear_args(*args)
         if not is_valid:
             error_embed = create_embed(
                 title="Invalid arguments for this command",
@@ -65,7 +77,7 @@ class UtilityCog(ImprovedCog):
         else:
             limit += 1  # To account for THIS command call
             await ctx.channel.purge(
-                limit=limit, check=lambda msg: should_delete(msg, self.bot, ctx)
+                limit=limit, check=lambda msg: self._should_delete(msg, ctx)
             )
             # Send some feedback
             auto_destruct_timer = 5
@@ -87,3 +99,45 @@ class UtilityCog(ImprovedCog):
     async def clear_error(self, ctx, error):
         """Base error handler for the !clear command"""
         await self.log_error_and_apologize(ctx, error)
+
+    def _should_delete(self, msg, ctx):
+        """
+        Predicate to choose which message to delete in the `purge` API
+        :param Message msg: Any discord message we are reading through
+        :param Context ctx: The command call context
+        :return: Whether the message should be deleted
+        :rtype: bool
+        """
+        # Do not remove the user's call
+        if msg.id == ctx.message.id:
+            return False
+        # Remove command calls
+        if msg.content.startswith(os.getenv("COMMAND_PREFIX")):
+            return True
+        # Remove our bot's messages
+        if msg.author == self.bot.user:
+            return True
+        return False
+
+    def _validate_clear_args(*args):
+        """
+        Checks we only got 1 arg and it's a int between MIN_LIMIT and MAX_LIMIT
+        :param [str] args: The user's instructions
+        :return: Whether the args were valid, their value, and the error message
+        :rtype: bool, int or None, str
+        """
+        min_limit = 1
+        max_limit = 20
+        default_error = (
+            f"The `limit` argument must be a number between {min_limit} and {max_limit}"
+        )
+        if len(args) != 1:
+            error = f"This command expects only 1 argument, a number between {min_limit} and {max_limit}"
+            return False, None, error
+        try:
+            limit = int(args[0])
+        except ValueError:
+            return False, None, default_error
+        if not (min_limit <= limit <= max_limit):
+            return False, None, default_error
+        return True, limit, ""

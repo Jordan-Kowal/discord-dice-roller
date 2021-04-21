@@ -6,10 +6,8 @@ from discord.ext import commands
 
 # Application
 from discord_dice_roller.utils.cog import ImprovedCog
+from discord_dice_roller.utils.dice_roll import DiceRoll
 from discord_dice_roller.utils.embed import create_embed
-
-# Local
-from .dice_roll import DiceRoll
 
 
 # --------------------------------------------------------------------------------
