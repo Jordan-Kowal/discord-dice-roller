@@ -7,22 +7,24 @@
 - Add README.md
 - Add Versioning somewhere
 - Add CHANGELOG.md
+- update default error message to say use help or report bug
+
 
 ### Rolling
 - Update reroll with JSON
 - `use` shortcut roll
 - Add `--short` option
+- Update docstring with command list
 
 ### Settings
-- `remove`
-- `removeall`
-
-### Utility
-- Add the `help` command
-- Add the `info` command (top.gg link, github, etc.)
 - `setprefix [value]` per guild ID (guild_settings.json)
 - `getprefix` per guild ID (guild_settings.json)
 - Test using 2 servers
 
+### Utility
+- Add the `help` command
+- Add the `info` command (top.gg link, github, etc.)
+- Update docstring with command list
+
 ### Start
-- Add feedback on boot
+- Log/console en boot

@@ -28,6 +28,18 @@ def create_error_embed(**kwargs):
     :return: A preset discord Embed
     :rtype: Embed
     """
-    kwargs.setdefault("title", "Woopsie! :(")
+    kwargs.setdefault("title", "Error")
     kwargs.setdefault("color", discord.Color.red())
+    return create_embed(**kwargs)
+
+
+def create_warning_embed(**kwargs):
+    """
+    Same as create_embed but with a default title and color set to orange
+    :param kwargs: Standard discord.Embed kwargs
+    :return: A preset discord Embed
+    :rtype: Embed
+    """
+    kwargs.setdefault("title", "Warning")
+    kwargs.setdefault("color", discord.Color.orange())
     return create_embed(**kwargs)

@@ -67,9 +67,7 @@ class UtilityCog(ImprovedCog):
         """Checks the last N messages in the channel and remove both commands and bot messages"""
         is_valid, limit, error_message = self._validate_clear_args(*args)
         if not is_valid:
-            error_embed = create_error_embed(
-                title="Invalid arguments for this command", description=error_message,
-            )
+            error_embed = create_error_embed(description=error_message)
             await ctx.send(embed=error_embed)
         else:
             limit += 1  # To account for THIS command call
@@ -124,11 +122,9 @@ class UtilityCog(ImprovedCog):
         """
         min_limit = 1
         max_limit = 20
-        default_error = (
-            f"The `limit` argument must be a number between {min_limit} and {max_limit}"
-        )
+        default_error = f"[Limit] The `limit` argument must be a number between {min_limit} and {max_limit}"
         if len(args) != 1:
-            error = f"This command expects only 1 argument, a number between {min_limit} and {max_limit}"
+            error = f"[Limit] This command expects only 1 argument, a number between {min_limit} and {max_limit}"
             return False, None, error
         try:
             limit = int(args[0])

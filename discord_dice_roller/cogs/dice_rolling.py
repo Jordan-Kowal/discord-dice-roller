@@ -6,7 +6,7 @@ from discord.ext import commands
 # Application
 from discord_dice_roller.utils.cog import ImprovedCog
 from discord_dice_roller.utils.dice_roll import DiceRoll
-from discord_dice_roller.utils.embed import create_error_embed
+from discord_dice_roller.utils.embed import create_warning_embed
 
 
 # --------------------------------------------------------------------------------
@@ -39,7 +39,7 @@ class DiceRollingCog(ImprovedCog):
         last_dice_roll = self.last_roll_per_user.get(user_id, None)
         if last_dice_roll is None:
             description = "You have yet to send one valid `!roll` command"
-            embed_output = create_error_embed(description=description)
+            embed_output = create_warning_embed(description=description)
         else:
             dice_roll = last_dice_roll.copy()
             embed_output = dice_roll.roll()
