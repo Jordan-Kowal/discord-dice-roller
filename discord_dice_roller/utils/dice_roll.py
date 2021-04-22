@@ -7,8 +7,8 @@ import re
 # Third-party
 from discord import Color
 
-# Application
-from discord_dice_roller.utils.embed import create_embed, create_error_embed
+# Local
+from .embed import create_embed, create_error_embed
 
 # --------------------------------------------------------------------------------
 # > Constants
@@ -126,7 +126,9 @@ class RollModifier(RollComponent):
         message = f"# {previous_total} {sign} {abs_value} = {self.dice_roll.total}"
         text = generate_discord_markdown_string([message])
         embed.add_field(
-            name=f"Modifier {sign}{abs_value}", value=text, inline=False,
+            name=f"Modifier {sign}{abs_value}",
+            value=text,
+            inline=False,
         )
 
 
@@ -260,7 +262,9 @@ class Advantage(BaseAction):
             result = f"Rolled {self.die.value} and discarded it!"
         text = generate_discord_markdown_string([result])
         embed.add_field(
-            name=self.name, value=text, inline=False,
+            name=self.name,
+            value=text,
+            inline=False,
         )
 
 
@@ -301,7 +305,9 @@ class Disadvantage(BaseAction):
             result = f"Rolled {self.die.value} and discarded it!"
         text = generate_discord_markdown_string([result])
         embed.add_field(
-            name=self.name, value=text, inline=False,
+            name=self.name,
+            value=text,
+            inline=False,
         )
 
 
@@ -331,7 +337,9 @@ class CriticalHit(BaseAction):
         ]
         text = generate_discord_markdown_string(messages)
         embed.add_field(
-            name=self.name, value=text, inline=False,
+            name=self.name,
+            value=text,
+            inline=False,
         )
 
 
@@ -402,7 +410,9 @@ class KeepDropAction(BaseAction):
         ]
         text = generate_discord_markdown_string(messages)
         embed.add_field(
-            name=self.name, value=text, inline=False,
+            name=self.name,
+            value=text,
+            inline=False,
         )
 
     def _compute_name(self):
@@ -673,5 +683,7 @@ class DiceRoll:
         lines.append(f"# {total_score}")
         text = generate_discord_markdown_string(lines)
         embed.add_field(
-            name=f"Dice rolls", value=text, inline=False,
+            name="Dice rolls",
+            value=text,
+            inline=False,
         )

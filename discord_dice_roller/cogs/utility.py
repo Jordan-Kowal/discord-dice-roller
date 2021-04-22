@@ -8,9 +8,9 @@ import time
 # Third-party
 from discord.ext import commands
 
-# Application
-from discord_dice_roller.utils.cog import ImprovedCog
-from discord_dice_roller.utils.embed import create_embed, create_error_embed
+# Local
+from ..utils.cog import ImprovedCog
+from ..utils.embed import create_embed, create_error_embed
 
 
 # --------------------------------------------------------------------------------

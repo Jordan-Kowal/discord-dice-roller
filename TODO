@@ -11,8 +11,6 @@
 
 
 ### Rolling
-- Update reroll with JSON
-- `use` shortcut roll
 - Add `--short` option
 - Update docstring with command list
 
