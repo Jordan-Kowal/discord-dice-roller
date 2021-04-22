@@ -1,6 +1,7 @@
 """Cogs for our bot"""
 
 # Local
-from .config import ConfigCog
 from .dice_rolling import DiceRollingCog
+from .guild_config import GuildConfigCog
+from .user_config import UserConfigCog
 from .utility import UtilityCog

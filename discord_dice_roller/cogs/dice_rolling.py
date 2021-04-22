@@ -7,7 +7,7 @@ from discord.ext import commands
 from ..utils.cog import ImprovedCog
 from ..utils.dice_roll import DiceRoll
 from ..utils.embed import create_warning_embed
-from ..utils.files import get_user_shortcuts
+from ..utils.settings import get_user_shortcuts
 
 
 # --------------------------------------------------------------------------------
@@ -69,7 +69,7 @@ class DiceRollingCog(ImprovedCog):
     async def use(self, ctx, name, *args):
         """Rolls the dice using a user's shortcut and maybe additional instructions"""
         user_id = str(ctx.message.author.id)
-        _, user_shortcuts = get_user_shortcuts(user_id, {})
+        _, user_shortcuts = get_user_shortcuts(user_id)
         if name not in user_shortcuts:
             description = f"Found no shortcut with the name `{name}` in your settings"
             embed = create_warning_embed(description=description)

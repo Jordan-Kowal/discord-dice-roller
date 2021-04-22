@@ -1,8 +1,7 @@
-"""Cog for changing/customizing the bot settings"""
+"""Cog allowing users to customize their settings"""
 
 
 # Built-in
-import json
 import re
 
 # Third-party
@@ -20,26 +19,23 @@ from ..utils.dice_roll import (
     generate_discord_markdown_string,
 )
 from ..utils.embed import create_embed, create_error_embed, create_warning_embed
-from ..utils.files import (
-    USER_SHORTCUTS_FILEPATH,
-    get_shortcuts_content,
-    get_user_shortcuts,
-    update_user_shortcuts,
-)
+from ..utils.settings import get_user_shortcuts, update_user_shortcuts
 
 
 # --------------------------------------------------------------------------------
 # > Cog
 # --------------------------------------------------------------------------------
-class ConfigCog(ImprovedCog):
+class UserConfigCog(ImprovedCog):
     """
-    Allows user to customize some settings for themselves or their guild
+    Allows user to customize some settings for themselves
     Provides the following actions:
         > remove        Deletes an existing shortcut for the user
         > removeall     Deletes all the shortcuts of the user
         > save          Creates a shortcut for a group of roll instructions
         > show          Shows the current shortcuts for the user
     """
+
+    MAX_SHORTCUTS = 20
 
     # ----------------------------------------
     # remove
@@ -48,7 +44,7 @@ class ConfigCog(ImprovedCog):
     async def remove(self, ctx, name):
         """Deletes an existing shortcut for the user"""
         user_id = str(ctx.message.author.id)
-        file_content, user_shortcuts = get_user_shortcuts(user_id, {})
+        file_content, user_shortcuts = get_user_shortcuts(user_id)
         if name not in user_shortcuts.keys():
             description = f"Found no shortcut with the name `{name}` in your settings"
             embed = create_warning_embed(description=description)
@@ -71,13 +67,14 @@ class ConfigCog(ImprovedCog):
     async def removeall(self, ctx):
         """Deletes all the shortcuts of the user"""
         user_id = str(ctx.message.author.id)
-        file_content = get_shortcuts_content()
-        if user_id in file_content.keys():
-            del file_content[user_id]
-        with open(USER_SHORTCUTS_FILEPATH, "w") as f:
-            json.dump(file_content, f, indent=2)
-        description = "All your shortcuts have been removed"
-        embed = create_embed(title="Settings updated!", description=description)
+        file_content, user_shortcuts = get_user_shortcuts(ctx.message.author.id)
+        if len(user_shortcuts.keys()) == 0:
+            description = "Looks like you have no existing shortcuts!"
+            embed = create_warning_embed(description=description)
+        else:
+            update_user_shortcuts(user_id, {}, file_content)
+            description = "All your shortcuts have been removed"
+            embed = create_embed(title="Settings updated!", description=description)
         await ctx.send(embed=embed)
 
     @removeall.error
@@ -97,14 +94,24 @@ class ConfigCog(ImprovedCog):
             embed = create_error_embed(description=description)
         else:
             user_id = str(ctx.message.author.id)
-            file_content, user_shortcuts = get_user_shortcuts(user_id, {})
-            instructions_as_string = " ".join(args)
-            user_shortcuts[name] = instructions_as_string
-            update_user_shortcuts(user_id, user_shortcuts, file_content)
-            description = (
-                f"The `{name}` shortcut now points to `{instructions_as_string}`"
+            file_content, user_shortcuts = get_user_shortcuts(user_id)
+            _max = (
+                self.MAX_SHORTCUTS
+                if name not in user_shortcuts
+                else self.MAX_SHORTCUTS + 1
             )
-            embed = create_embed(title="Settings updated!", description=description)
+            if len(user_shortcuts.items()) > _max:
+                description = f"Cannot have more than `{self.MAX_SHORTCUTS}` shortcuts. \
+                    \nPlease remove some using the `remove` command"
+                embed = create_error_embed(description=description)
+            else:
+                instructions_as_string = " ".join(args)
+                user_shortcuts[name] = instructions_as_string
+                update_user_shortcuts(user_id, user_shortcuts, file_content)
+                description = (
+                    f"The `{name}` shortcut now points to `{instructions_as_string}`"
+                )
+                embed = create_embed(title="Settings updated!", description=description)
         await ctx.send(embed=embed)
 
     @save.error
@@ -152,7 +159,7 @@ class ConfigCog(ImprovedCog):
     async def show(self, ctx):
         """Shows the current shortcuts for the user"""
         content, shortcuts = get_user_shortcuts(ctx.message.author.id)
-        if shortcuts is None:
+        if len(shortcuts.keys()) == 0:
             description = "Looks like you have no existing shortcuts!"
             embed = create_warning_embed(description=description)
         else:

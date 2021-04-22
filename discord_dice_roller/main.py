@@ -9,26 +9,30 @@ from discord.ext import commands
 from dotenv import load_dotenv
 
 # Application
-from discord_dice_roller.cogs import ConfigCog, DiceRollingCog, UtilityCog
-from discord_dice_roller.utils.files import init_data_files
+from discord_dice_roller.cogs import (
+    DiceRollingCog,
+    GuildConfigCog,
+    UserConfigCog,
+    UtilityCog,
+)
 from discord_dice_roller.utils.logging import setup_logging
+from discord_dice_roller.utils.settings import get_command_prefix, init_settings_files
 
 # --------------------------------------------------------------------------------
 # > Main
 # --------------------------------------------------------------------------------
 if __name__ == "__main__":
     # Env setup
-    load_dotenv()
-    TOKEN = os.getenv("DISCORD_TOKEN")
     random.seed()
-    # Logging setup
+    load_dotenv()
     setup_logging()
-    # Data setup
-    init_data_files()
+    init_settings_files()
     # Bot setup
-    bot = commands.Bot(command_prefix=os.getenv("COMMAND_PREFIX"), help_command=None)
-    bot.add_cog(ConfigCog(bot))
+    bot = commands.Bot(command_prefix=get_command_prefix, help_command=None)
     bot.add_cog(DiceRollingCog(bot))
     bot.add_cog(UtilityCog(bot))
+    bot.add_cog(UserConfigCog(bot))
+    bot.add_cog(GuildConfigCog(bot))
     # Execute
+    TOKEN = os.getenv("DISCORD_TOKEN")
     bot.run(TOKEN)

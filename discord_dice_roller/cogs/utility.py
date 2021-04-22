@@ -17,7 +17,7 @@ from ..utils.embed import create_embed, create_error_embed
 # > Cog
 # --------------------------------------------------------------------------------
 class UtilityCog(ImprovedCog):
-    """Provides utility commands to assist our users"""
+    """TBD"""
 
     # ----------------------------------------
     # Help
@@ -106,7 +106,7 @@ class UtilityCog(ImprovedCog):
         if msg.id == ctx.message.id:
             return False
         # Remove command calls
-        if msg.content.startswith(os.getenv("COMMAND_PREFIX")):
+        if msg.content.startswith(ctx.prefix):
             return True
         # Remove our bot's messages
         if msg.author == self.bot.user:

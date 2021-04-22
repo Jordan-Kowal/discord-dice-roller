@@ -9,15 +9,13 @@
 - Add CHANGELOG.md
 - update default error message to say use help or report bug
 
-
 ### Rolling
-- Add `--short` option
-- Update docstring with command list
+- Add option component with settings resolution
+- Add default value for each option
+- Implement `verbose` option, default to `True`
 
 ### Settings
-- `setprefix [value]` per guild ID (guild_settings.json)
-- `getprefix` per guild ID (guild_settings.json)
-- Test using 2 servers
+- Add `setoption` [name]
 
 ### Utility
 - Add the `help` command
