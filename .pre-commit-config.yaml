@@ -1,21 +1,21 @@
 repos:
 
 -   repo: https://github.com/PyCQA/pydocstyle
-    rev: 5.0.2
+    rev: 6.0.0
     hooks:
     -   id: pydocstyle
 
 -   repo: https://github.com/timothycrosley/isort
-    rev: 4.3.21-2
+    rev: 5.8.0
     hooks:
     -   id: isort
 
 -   repo: https://github.com/ambv/black
-    rev: stable
+    rev: 20.8b1
     hooks:
     -   id: black
 
 -   repo: https://github.com/PyCQA/flake8
-    rev: 3.7.9
+    rev: 3.9.1
     hooks:
     -   id: flake8
