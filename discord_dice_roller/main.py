@@ -28,11 +28,9 @@ if __name__ == "__main__":
     setup_logging()
     init_settings_files()
     # Bot setup
-    bot = commands.Bot(command_prefix=get_command_prefix, help_command=None)
-    bot.add_cog(DiceRollingCog(bot))
-    bot.add_cog(UtilityCog(bot))
-    bot.add_cog(UserConfigCog(bot))
-    bot.add_cog(GuildConfigCog(bot))
+    bot = commands.Bot(command_prefix=get_command_prefix)
+    for cog_class in [DiceRollingCog, GuildConfigCog, UserConfigCog, UtilityCog]:
+        bot.add_cog(cog_class(bot))
     # Execute
     TOKEN = os.getenv("DISCORD_TOKEN")
     bot.run(TOKEN)

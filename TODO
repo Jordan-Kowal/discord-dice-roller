@@ -19,7 +19,6 @@
 
 ### Utility
 - Add the `help` command
-- Add the `info` command (top.gg link, github, etc.)
 - Update docstring with command list
 
 ### Start
@@ -27,3 +26,4 @@
 
 ### Performance
 - Replace JSON settings with database for better performance
+- Add topgg link in `info`
