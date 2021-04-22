@@ -29,6 +29,7 @@ class DiceRollingCog(ImprovedCog):
     @commands.command()
     async def roll(self, ctx, *args):
         """Rolls the dice using the provided instructions"""
+        self.log_command_call("roll", ctx.message)
         user_id = ctx.message.author.id
         dice_roll = DiceRoll(args)
         embed_output = dice_roll.roll()
@@ -47,6 +48,7 @@ class DiceRollingCog(ImprovedCog):
     @commands.command()
     async def reroll(self, ctx, *args):
         """Rolls the dice using the player's last VALID instructions"""
+        self.log_command_call("reroll", ctx.message)
         user_id = ctx.message.author.id
         last_dice_roll = self.last_roll_per_user.get(user_id, None)
         if last_dice_roll is None:
@@ -68,6 +70,7 @@ class DiceRollingCog(ImprovedCog):
     @commands.command()
     async def use(self, ctx, name, *args):
         """Rolls the dice using a user's shortcut and maybe additional instructions"""
+        self.log_command_call("use", ctx.message)
         user_id = str(ctx.message.author.id)
         _, user_shortcuts = get_user_shortcuts(user_id)
         if name not in user_shortcuts:

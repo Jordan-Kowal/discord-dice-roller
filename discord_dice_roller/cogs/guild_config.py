@@ -28,6 +28,7 @@ class GuildConfigCog(ImprovedCog):
     @commands.has_permissions(administrator=True)
     async def setprefix(self, ctx, prefix):
         """Changes prefix for this bot on this guild. Only usable by admins."""
+        self.log_command_call("setprefix", ctx.message)
         guild_id = str(ctx.guild.id)
         file_content, settings = get_guild_settings(guild_id)
         settings["prefix"] = prefix
@@ -49,6 +50,7 @@ class GuildConfigCog(ImprovedCog):
         """On mentioned-first, returns the current prefix for this bot on this guild"""
         if len(message.mentions) == 0 or message.mentions[0] != self.bot.user:
             return
+        self.log_command_call("getprefix", message)
         guild_id = str(message.guild.id)
         _, settings = get_guild_settings(guild_id)
         prefix_value = settings.get("prefix", DEFAULT_PREFIX)

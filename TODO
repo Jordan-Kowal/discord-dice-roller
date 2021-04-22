@@ -2,10 +2,7 @@
 
 ### General
 - Update thumbnail
-- Also log in console
-- Add INFO log at the start of each command
 - Add README.md
-- Add Versioning somewhere
 - Add CHANGELOG.md
 - update default error message to say use help or report bug
 
@@ -19,11 +16,7 @@
 
 ### Utility
 - Add the `help` command
-- Update docstring with command list
-
-### Start
-- Log/console en boot
 
 ### Performance
 - Replace JSON settings with database for better performance
-- Add topgg link in `info`
+- Add top.gg link in `info`

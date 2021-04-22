@@ -43,6 +43,7 @@ class UserConfigCog(ImprovedCog):
     @commands.command()
     async def remove(self, ctx, name):
         """Deletes an existing shortcut for the user"""
+        self.log_command_call("remove", ctx.message)
         user_id = str(ctx.message.author.id)
         file_content, user_shortcuts = get_user_shortcuts(user_id)
         if name not in user_shortcuts.keys():
@@ -66,6 +67,7 @@ class UserConfigCog(ImprovedCog):
     @commands.command()
     async def removeall(self, ctx):
         """Deletes all the shortcuts of the user"""
+        self.log_command_call("removeall", ctx.message)
         user_id = str(ctx.message.author.id)
         file_content, user_shortcuts = get_user_shortcuts(ctx.message.author.id)
         if len(user_shortcuts.keys()) == 0:
@@ -88,6 +90,7 @@ class UserConfigCog(ImprovedCog):
     @commands.command()
     async def save(self, ctx, name, *args):
         """Creates a shortcut for a group of roll instructions"""
+        self.log_command_call("save", ctx.message)
         errors = self._validate_set_instructions(name, *args)
         if len(errors) > 0:
             description = "\n".join(errors)
@@ -158,6 +161,7 @@ class UserConfigCog(ImprovedCog):
     @commands.command()
     async def show(self, ctx):
         """Shows the current shortcuts for the user"""
+        self.log_command_call("show", ctx.message)
         content, shortcuts = get_user_shortcuts(ctx.message.author.id)
         if len(shortcuts.keys()) == 0:
             description = "Looks like you have no existing shortcuts!"

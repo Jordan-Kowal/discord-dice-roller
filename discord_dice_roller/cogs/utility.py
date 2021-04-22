@@ -28,6 +28,7 @@ class UtilityCog(ImprovedCog):
     @commands.command()
     async def info(self, ctx):
         """Provides a recap of the bot information"""
+        self.log_command_call("info", ctx.message)
         lines = [
             "Author: **Jordan Kowal**",
             "GitHub: **[Link](https://github.com/Jordan-Kowal/discord-dice-roller)**",
@@ -48,6 +49,7 @@ class UtilityCog(ImprovedCog):
     @commands.command()
     async def ping(self, ctx):
         """Checks if the bot is up"""
+        self.log_command_call("ping", ctx.message)
         embed_output = create_embed(title="pong")
         await ctx.send(embed=embed_output)
 
@@ -62,6 +64,7 @@ class UtilityCog(ImprovedCog):
     @commands.command()
     async def clear(self, ctx, limit):
         """Checks the last N messages in the channel and remove both commands and bot messages"""
+        self.log_command_call("clear", ctx.message)
         error = self._validate_clear_args(limit)
         if error is not None:
             error_embed = create_error_embed(description=error)
