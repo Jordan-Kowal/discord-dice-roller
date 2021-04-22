@@ -24,3 +24,6 @@
 
 ### Start
 - Log/console en boot
+
+### Performance
+- Replace JSON settings with database for better performance

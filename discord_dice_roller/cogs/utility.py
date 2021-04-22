@@ -63,14 +63,14 @@ class UtilityCog(ImprovedCog):
     # clear
     # ----------------------------------------
     @commands.command()
-    async def clear(self, ctx, *args):
+    async def clear(self, ctx, limit):
         """Checks the last N messages in the channel and remove both commands and bot messages"""
-        is_valid, limit, error_message = self._validate_clear_args(*args)
-        if not is_valid:
-            error_embed = create_error_embed(description=error_message)
+        error = self._validate_clear_args(limit)
+        if error is not None:
+            error_embed = create_error_embed(description=error)
             await ctx.send(embed=error_embed)
         else:
-            limit += 1  # To account for THIS command call
+            limit = int(limit) + 1  # To account for THIS command call
             await ctx.channel.purge(
                 limit=limit, check=lambda msg: self._should_delete(msg, ctx)
             )
@@ -113,23 +113,21 @@ class UtilityCog(ImprovedCog):
             return True
         return False
 
-    def _validate_clear_args(*args):
+    @staticmethod
+    def _validate_clear_args(limit):
         """
-        Checks we only got 1 arg and it's a int between MIN_LIMIT and MAX_LIMIT
-        :param [str] args: The user's instructions
-        :return: Whether the args were valid, their value, and the error message
-        :rtype: bool, int or None, str
+        Checks we got a `limit` within the right range
+        :param str limit: The provided quantity of messages to check
+        :return: The error message, if there's any
+        :rtype: str or None
         """
         min_limit = 1
         max_limit = 20
         default_error = f"[Limit] The `limit` argument must be a number between {min_limit} and {max_limit}"
-        if len(args) != 1:
-            error = f"[Limit] This command expects only 1 argument, a number between {min_limit} and {max_limit}"
-            return False, None, error
         try:
-            limit = int(args[0])
-        except ValueError:
-            return False, None, default_error
+            limit = int(limit)
+        except (ValueError, TypeError):
+            return default_error
         if not (min_limit <= limit <= max_limit):
-            return False, None, default_error
-        return True, limit, ""
+            return default_error
+        return None
