@@ -8,7 +8,6 @@ from collections import OrderedDict
 # --------------------------------------------------------------------------------
 # > Global
 # --------------------------------------------------------------------------------
-DEFAULT_PREFIX = "!"
 SETTINGS_FOLDER = os.path.join(os.getcwd(), "settings")
 USER_SHORTCUTS_FILEPATH = os.path.join(SETTINGS_FOLDER, "user_shortcuts.json")
 USER_SETTINGS_FILEPATH = os.path.join(SETTINGS_FOLDER, "user_settings.json")
@@ -16,10 +15,7 @@ GUILD_SETTINGS_FILEPATH = os.path.join(SETTINGS_FOLDER, "guild_settings.json")
 
 
 def init_settings_files():
-    """
-    Creates the data folder, user settings file,
-    and guild settings file, but only if they are missing
-    """
+    """If missing, creates the settings folder and the empty JSON files"""
     if not os.path.exists(SETTINGS_FOLDER):
         os.makedirs(SETTINGS_FOLDER)
     for path in [GUILD_SETTINGS_FILEPATH, USER_SHORTCUTS_FILEPATH]:
@@ -29,88 +25,102 @@ def init_settings_files():
             json.dump({}, f)
 
 
+def get_key(filepath, key, default=None):
+    """
+    Opens the file and fetches the value at said key
+    :param str filepath: The path to the file
+    :param str key: The key to fetch
+    :param default: The value to return if no key is found
+    :return: The value at the key (or the default value)
+    """
+    with open(filepath, "r") as f:
+        file_content = json.load(f)
+    return file_content.get(key, default)
+
+
+def update_key(filepath, key, value):
+    """
+    Updates the key in a given JSON file. Dict values are sorted alphabetically.
+    :param str filepath: The path to the file
+    :param str key: The key to update
+    :param value: The value for said key
+    """
+    with open(filepath, "r") as f:
+        file_content = json.load(f)
+    if type(value) == dict:
+        file_content[key] = OrderedDict(sorted(value.items(), key=lambda t: t[0]))
+    else:
+        file_content[key] = value
+    with open(filepath, "w") as f:
+        json.dump(file_content, f, indent=2)
+
+
 # --------------------------------------------------------------------------------
 # > User shortcuts
 # --------------------------------------------------------------------------------
 def get_user_shortcuts(user_id):
     """
-    Opens the shortcuts JSON file and returns both its content and the user's content
-    :param user_id: The discord user id
-    :type user_id: str or int
-    :return: The content of the JSON file and the user subpart
-    :rtype: dict, dict
+    Gets the user's shortcuts from the JSON file
+    :param str user_id: The discord user id as string
+    :return: The user's shortcuts
+    :rtype: dict
     """
-    with open(USER_SHORTCUTS_FILEPATH, "r") as f:
-        file_content = json.load(f)
-    user_id = str(user_id)
-    return file_content, file_content.get(user_id, {})
+    return get_key(USER_SHORTCUTS_FILEPATH, user_id, {})
 
 
-def update_user_shortcuts(user_id, user_data, file_content=None):
+def update_user_shortcuts(user_id, user_data):
     """
     Updates the JSON file with the new user's shortcuts (sorted alphabetically)
-    :param user_id: The discord user id
-    :type user_id: str or int
+    :param str user_id: The discord user id
     :param dict user_data: The new shortcuts for the user
-    :param dict file_content: The current file content (before update)
     """
-    if file_content is None:
-        with open(USER_SHORTCUTS_FILEPATH, "r") as f:
-            file_content = json.load(f)
-    user_id = str(user_id)
-    file_content[user_id] = OrderedDict(sorted(user_data.items(), key=lambda t: t[0]))
-    with open(USER_SHORTCUTS_FILEPATH, "w") as f:
-        json.dump(file_content, f, indent=2)
+    update_key(USER_SHORTCUTS_FILEPATH, user_id, user_data)
 
 
 # --------------------------------------------------------------------------------
 # > User settings
 # --------------------------------------------------------------------------------
+DEFAULT_USER_SETTINGS = {"verbose": True}
+
+
+def get_user_settings(user_id):
+    """TBD"""
+    pass
 
 
 # --------------------------------------------------------------------------------
 # > Guild settings
 # --------------------------------------------------------------------------------
+DEFAULT_GUILD_SETTINGS = {"prefix": "!"}
+
+
 def get_command_prefix(_bot, message):
     """
     Gets the command prefix based on the guild sending the message
-    Callback for the Bot.command_prefix
     :param Bot _bot: Our bot instance
     :param Message message: Discord message
     :return: The prefix for the current guild
     :rtype: str
     """
     guild_id = str(message.guild.id)
-    _, guild_settings = get_guild_settings(guild_id)
-    return guild_settings.get("prefix", DEFAULT_PREFIX)
+    guild_settings = get_guild_settings(guild_id)
+    return guild_settings.get("prefix", DEFAULT_GUILD_SETTINGS["prefix"])
 
 
 def get_guild_settings(guild_id):
     """
-    Opens the guild settings JSON file and returns both its content and the guild's content
-    :param guild_id: The guild/server ID
-    :type guild_id: str or int
-    :return: The file content and the guild settings
-    :rtype: dict, dict
+    Gets the guild's settings from the JSON file
+    :param str guild_id: The discord/server id
+    :return: The guild's settings
+    :rtype: dict
     """
-    guild_id = str(guild_id)
-    with open(GUILD_SETTINGS_FILEPATH, "r") as f:
-        file_content = json.load(f)
-    return file_content, file_content.get(guild_id, {})
+    return get_key(GUILD_SETTINGS_FILEPATH, guild_id, {})
 
 
-def update_guild_settings(guild_id, guild_data, file_content=None):
+def update_guild_settings(guild_id, guild_data):
     """
     Updates the JSON file with the new guild's settings (sorted alphabetically)
-    :param guild_id: The discord user id
-    :type guild_id: str or int
+    :param str guild_id: The discord guild/server id
     :param dict guild_data: The new shortcuts for the user
-    :param dict file_content: The current file content (before update)
     """
-    if file_content is None:
-        with open(GUILD_SETTINGS_FILEPATH, "r") as f:
-            file_content = json.load(f)
-    guild_id = str(guild_id)
-    file_content[guild_id] = OrderedDict(sorted(guild_data.items(), key=lambda t: t[0]))
-    with open(GUILD_SETTINGS_FILEPATH, "w") as f:
-        json.dump(file_content, f, indent=2)
+    update_key(GUILD_SETTINGS_FILEPATH, guild_id, guild_data)

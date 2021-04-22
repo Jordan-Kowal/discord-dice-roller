@@ -45,13 +45,13 @@ class UserConfigCog(ImprovedCog):
         """Deletes an existing shortcut for the user"""
         self.log_command_call("remove", ctx.message)
         user_id = str(ctx.message.author.id)
-        file_content, user_shortcuts = get_user_shortcuts(user_id)
+        user_shortcuts = get_user_shortcuts(user_id)
         if name not in user_shortcuts.keys():
             description = f"Found no shortcut with the name `{name}` in your settings"
             embed = create_warning_embed(description=description)
         else:
             del user_shortcuts[name]
-            update_user_shortcuts(user_id, user_shortcuts, file_content)
+            update_user_shortcuts(user_id, user_shortcuts)
             description = f"The `{name}` shortcut has been removed successfully"
             embed = create_embed(title="Settings updated!", description=description)
         await ctx.send(embed=embed)
@@ -69,12 +69,12 @@ class UserConfigCog(ImprovedCog):
         """Deletes all the shortcuts of the user"""
         self.log_command_call("removeall", ctx.message)
         user_id = str(ctx.message.author.id)
-        file_content, user_shortcuts = get_user_shortcuts(ctx.message.author.id)
+        user_shortcuts = get_user_shortcuts(user_id)
         if len(user_shortcuts.keys()) == 0:
             description = "Looks like you have no existing shortcuts!"
             embed = create_warning_embed(description=description)
         else:
-            update_user_shortcuts(user_id, {}, file_content)
+            update_user_shortcuts(user_id, {})
             description = "All your shortcuts have been removed"
             embed = create_embed(title="Settings updated!", description=description)
         await ctx.send(embed=embed)
@@ -97,7 +97,7 @@ class UserConfigCog(ImprovedCog):
             embed = create_error_embed(description=description)
         else:
             user_id = str(ctx.message.author.id)
-            file_content, user_shortcuts = get_user_shortcuts(user_id)
+            user_shortcuts = get_user_shortcuts(user_id)
             _max = (
                 self.MAX_SHORTCUTS
                 if name not in user_shortcuts
@@ -110,7 +110,7 @@ class UserConfigCog(ImprovedCog):
             else:
                 instructions_as_string = " ".join(args)
                 user_shortcuts[name] = instructions_as_string
-                update_user_shortcuts(user_id, user_shortcuts, file_content)
+                update_user_shortcuts(user_id, user_shortcuts)
                 description = (
                     f"The `{name}` shortcut now points to `{instructions_as_string}`"
                 )
@@ -162,7 +162,7 @@ class UserConfigCog(ImprovedCog):
     async def show(self, ctx):
         """Shows the current shortcuts for the user"""
         self.log_command_call("show", ctx.message)
-        content, shortcuts = get_user_shortcuts(ctx.message.author.id)
+        shortcuts = get_user_shortcuts(str(ctx.message.author.id))
         if len(shortcuts.keys()) == 0:
             description = "Looks like you have no existing shortcuts!"
             embed = create_warning_embed(description=description)

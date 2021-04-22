@@ -6,7 +6,11 @@ from discord.ext import commands
 # Local
 from ..utils.cog import ImprovedCog
 from ..utils.embed import create_embed
-from ..utils.settings import DEFAULT_PREFIX, get_guild_settings, update_guild_settings
+from ..utils.settings import (
+    get_command_prefix,
+    get_guild_settings,
+    update_guild_settings,
+)
 
 
 # --------------------------------------------------------------------------------
@@ -30,9 +34,9 @@ class GuildConfigCog(ImprovedCog):
         """Changes prefix for this bot on this guild. Only usable by admins."""
         self.log_command_call("setprefix", ctx.message)
         guild_id = str(ctx.guild.id)
-        file_content, settings = get_guild_settings(guild_id)
+        settings = get_guild_settings(guild_id)
         settings["prefix"] = prefix
-        update_guild_settings(guild_id, settings, file_content)
+        update_guild_settings(guild_id, settings)
         description = f"From now on, I'll respond to the `{prefix}` command prefix"
         embed = create_embed(title="Settings updated!", description=description)
         await ctx.send(embed=embed)
@@ -51,9 +55,7 @@ class GuildConfigCog(ImprovedCog):
         if len(message.mentions) == 0 or message.mentions[0] != self.bot.user:
             return
         self.log_command_call("getprefix", message)
-        guild_id = str(message.guild.id)
-        _, settings = get_guild_settings(guild_id)
-        prefix_value = settings.get("prefix", DEFAULT_PREFIX)
+        prefix_value = get_command_prefix(self.bot, message)
         embed = create_embed(
             description=f"My current prefix on this guild is `{prefix_value}`"
         )

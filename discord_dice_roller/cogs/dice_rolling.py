@@ -46,7 +46,7 @@ class DiceRollingCog(ImprovedCog):
     # reroll
     # ----------------------------------------
     @commands.command()
-    async def reroll(self, ctx, *args):
+    async def reroll(self, ctx):
         """Rolls the dice using the player's last VALID instructions"""
         self.log_command_call("reroll", ctx.message)
         user_id = ctx.message.author.id
@@ -72,7 +72,7 @@ class DiceRollingCog(ImprovedCog):
         """Rolls the dice using a user's shortcut and maybe additional instructions"""
         self.log_command_call("use", ctx.message)
         user_id = str(ctx.message.author.id)
-        _, user_shortcuts = get_user_shortcuts(user_id)
+        user_shortcuts = get_user_shortcuts(user_id)
         if name not in user_shortcuts:
             description = f"Found no shortcut with the name `{name}` in your settings"
             embed = create_warning_embed(description=description)
