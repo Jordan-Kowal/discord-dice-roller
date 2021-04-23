@@ -1,14 +1,13 @@
 # TODO
 
+- [ ] Replace JSON settings with database for better performance
+- [ ] Add `top.gg` link in the `about` output
+- [ ] Add a `CHANGELOG.md`
+
 ### General
 - Update thumbnail
 - Add README.md
-- Add CHANGELOG.md
-- update default error message to say use help or report bug
+- Update page
 
 ### Utility
 - Add the `help` command
-
-### Performance
-- Replace JSON settings with database for better performance
-- Add top.gg link in `info`

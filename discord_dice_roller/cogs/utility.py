@@ -1,4 +1,4 @@
-"""Cog for utility commands like clean up or info"""
+"""Cog for utility commands like clean up or about"""
 
 # Built-in
 import time
@@ -17,30 +17,30 @@ from ..utils.embed import create_embed, create_error_embed
 class UtilityCog(ImprovedCog):
     """
     Provides utility commands such as:
-        > info      Provides a recap of the bot information
+        > about     Provides a recap of the bot information
         > ping      Checks if the bot is up
         > clear     Checks the last N messages in the channel and remove both commands and bot messages
     """
 
     # ----------------------------------------
-    # info
+    # about
     # ----------------------------------------
     @commands.command()
-    async def info(self, ctx):
+    async def about(self, ctx):
         """Provides a recap of the bot information"""
-        self.log_command_call("info", ctx.message)
+        self.log_command_call("about", ctx.message)
         lines = [
             "Author: **Jordan Kowal**",
-            "GitHub: **[Link](https://github.com/Jordan-Kowal/discord-dice-roller)**",
             "Version: **`1.0`**",
-            "Licence: **MIT - opensource**",
+            "Useful Links: **[Official Page](https://jordan-kowal.github.io/discord-dice-roller/)** || \
+            **[GitHub repository](https://github.com/Jordan-Kowal/discord-dice-roller)**",
         ]
         embed = create_embed(description="\n".join(lines))
         await ctx.send(embed=embed)
 
-    @info.error
-    async def info_error(self, ctx, error):
-        """Base error handler for the `info` command"""
+    @about.error
+    async def about_error(self, ctx, error):
+        """Base error handler for the `about` command"""
         await self.log_error_and_apologize(ctx, error)
 
     # ----------------------------------------

@@ -8,6 +8,7 @@ from discord.ext import commands
 
 # Local
 from .embed import create_error_embed
+from .settings import get_command_prefix
 
 
 # --------------------------------------------------------------------------------
@@ -33,9 +34,17 @@ class ImprovedCog(commands.Cog):
         """
         message = f"Command '{ctx.command}': {error} "
         logging.error(message)
+        prefix = get_command_prefix(self.bot, ctx.message)
+        description = """
+            Did you forget a required arguments in your command?
+            Use `{{prefix}}help` or check the [official documentation](https://jordan-kowal.github.io/discord-dice-roller/).
+            If you believe you found a bug, please open a [bug report here](https://github.com/Jordan-Kowal/discord-dice-roller/issues/new).
+        """.replace(
+            "{{prefix}}", prefix
+        )
         embed = create_error_embed(
             title=self.default_error_message,
-            description="Check the logs or contact your administrator for more info",
+            description=description,
         )
         await ctx.send(embed=embed)
 
