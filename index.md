@@ -75,6 +75,8 @@ follow a certain set of rules. So, what are they?
 | `Modifier` | Optional (1 max) | A raw number to add/subtract at your final total | `+10` or `-5` |
 | `Check` | Optional (1 max) | Automatically performs the check at the end of the roll | `>10` or `<=15` |
 
+And here's the list of actions:
+
 | Action | Description | Comment |
 | --- | --- | --- |
 | **Classic** |  |  |
