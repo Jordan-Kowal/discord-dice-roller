@@ -1,0 +1,9 @@
+version: "3.8"
+
+services:
+  bot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./settings:/usr/src/app/settings

@@ -9,14 +9,9 @@ from discord.ext import commands
 from dotenv import load_dotenv
 
 # Application
-from discord_dice_roller.cogs import (
-    DiceRollingCog,
-    GuildConfigCog,
-    UserConfigCog,
-    UtilityCog,
-)
-from discord_dice_roller.utils.logging import setup_logging
-from discord_dice_roller.utils.settings import get_command_prefix, init_settings_files
+from cogs import DiceRollingCog, GuildConfigCog, UserConfigCog, UtilityCog
+from utils.logging import setup_logging
+from utils.settings import get_command_prefix, init_settings_files
 
 # --------------------------------------------------------------------------------
 # > Main

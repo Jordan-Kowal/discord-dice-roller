@@ -7,9 +7,9 @@ import re
 # Third-party
 from discord.ext import commands
 
-# Local
-from ..utils.cog import ImprovedCog
-from ..utils.dice_roll import (
+# Application
+from utils.cog import ImprovedCog
+from utils.dice_roll import (
     CHECK_REGEX,
     COMPLEX_ACTION_REGEX,
     DICE_REGEX,
@@ -18,8 +18,8 @@ from ..utils.dice_roll import (
     DiceRoll,
     generate_discord_markdown_string,
 )
-from ..utils.embed import create_embed, create_error_embed, create_warning_embed
-from ..utils.settings import (
+from utils.embed import create_embed, create_error_embed, create_warning_embed
+from utils.settings import (
     DEFAULT_USER_SETTINGS,
     get_user_settings,
     get_user_shortcuts,

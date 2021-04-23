@@ -8,7 +8,7 @@ from collections import OrderedDict
 # --------------------------------------------------------------------------------
 # > Global
 # --------------------------------------------------------------------------------
-SETTINGS_FOLDER = os.path.join(os.getcwd(), "settings")
+SETTINGS_FOLDER = os.path.join(os.getcwd(), "../settings")
 
 
 def init_settings_files():

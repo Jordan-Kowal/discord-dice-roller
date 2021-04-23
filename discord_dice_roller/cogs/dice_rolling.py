@@ -3,11 +3,11 @@
 # Third-party
 from discord.ext import commands
 
-# Local
-from ..utils.cog import ImprovedCog
-from ..utils.dice_roll import DiceRoll
-from ..utils.embed import create_warning_embed
-from ..utils.settings import get_user_settings, get_user_shortcuts
+# Application
+from utils.cog import ImprovedCog
+from utils.dice_roll import DiceRoll
+from utils.embed import create_warning_embed
+from utils.settings import get_user_settings, get_user_shortcuts
 
 
 # --------------------------------------------------------------------------------

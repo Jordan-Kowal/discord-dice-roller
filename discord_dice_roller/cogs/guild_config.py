@@ -3,14 +3,10 @@
 # Third-party
 from discord.ext import commands
 
-# Local
-from ..utils.cog import ImprovedCog
-from ..utils.embed import create_embed
-from ..utils.settings import (
-    get_command_prefix,
-    get_guild_settings,
-    update_guild_settings,
-)
+# Application
+from utils.cog import ImprovedCog
+from utils.embed import create_embed
+from utils.settings import get_command_prefix, get_guild_settings, update_guild_settings
 
 
 # --------------------------------------------------------------------------------
