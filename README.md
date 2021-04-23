@@ -8,7 +8,7 @@ checkout the [Official Page](https://jordan-kowal.github.io/discord-dice-roller/
 ### Summary
 - [Create a bot on discord](#create-a-bot-on-discord)
 - [Get this project](#get-this-project)
-- [Make some changes](#make-some-changes)
+- [Contributing](#contributing)
 - [Run it with docker](#run-it-with-docker)
 
 
@@ -43,10 +43,11 @@ nano .env
 ```
 
 
-### Make some changes
-If you want to contribute or simply change the codebase locally, you'll need:
+### Contributing
+If you want to contribute, you'll need:
 - A virtual environment
 - Install the `pre-commit` hooks
+- (Optional) Setup your code editor with `flake8/isort/black` so that they format your files automatically
 
 Once you've made and activated your virtual env, you can run the following commands.
 It will install all the necessary dependencies and setup the `pre-commit` hooks:
