@@ -1,12 +1,39 @@
 ## Welcome to the user guide
 
 ### Summary
+- [A short command story](#a-short-command-story)
 - [Invite the bot](#invite-the-bot)
 - [Command list](#command-list)
 - [Roll instructions](#roll-instructions)
+    - [Categories](#categories)
+    - [Actions](#actions)
+    - [Examples](#examples)
 - [Settings](#settings)
 - [Found a bug?](#found-a-bug?)
 
+
+### A short command story
+
+```bash
+@DiceRoller  # Get the bot prefix on your server. Defaults to !
+!setprefix $  # Because you're an admin and you want to
+$setprefix !  # Because you changed your mind
+!settings  # View your user's settings
+!settings verbose=True  # And update them right away
+!roll 1d20 adv +3  # Roll 1 20-side die, reroll it and keep the best, then add +3
+!reroll  # Because you do not want to retype it
+!save hit 1d20 adv +3  # Because you REALLY do not want to retype it, so now it's mapped to `hit`
+!use hit  # That's faster than `!roll 1d20 adv +3`
+!clear 20  # Faster than cleaning up the messages manually
+!save damage 1d10 2d4 +3  # Might as well have several shortcuts
+!save hit 1d20 adv +4  # You can override existing one as well
+!show  # Just in case you forgot your shortcuts
+!remove damage  # In case you change your mind
+!removeall  # If you want to clean up your shortcuts
+!about  # Because you care about my work
+```
+
+TODO: Add screenshots
 
 ### Invite the bot
 
@@ -26,8 +53,7 @@ and choose which guild/server you want it to join. This link includes the bot's 
 
 First, let's see which commands are available. 
 They have been grouped by category to make it easier to read. 
-
-Quick legend:
+As for the `parameter` legend:
 - `[parameter]` means the parameter is **required**
 - `?[parameter]` means the parameter is **optional**
 - `[parameter]*` means the parameter is **repeatable**
@@ -37,12 +63,12 @@ Quick legend:
 | **Rolling dice** |  |
 | `reroll` | Rolls the dice using the same settings as the user's last valid dice roll |
 | `roll [instruction]*` | Rolls the dice using the provided instructions |
-| `use [shortcut] ?[instruction]*` | Rolls the dice using a user's shortcut and maybe additional instr |
+| `use [shortcut] ?[instruction]*` | Rolls the dice using a user's shortcut and maybe additional instructions |
 | **Shortcut management** |  |
-| `remove [shortcut]` | Remove one specific shortcut for the user |
-| `removeall` | Remove all of the user's shortcuts |
+| `remove [shortcut]` | Removes one specific shortcut for the user |
+| `removeall` | Removes all of the user's shortcuts |
 | `save [shortcut] [instruction]*` | Creates a new shortcut mapped to those instructions for the user |
-| `show` | Show the list of existing shortcuts for the user |
+| `show` | Shows the list of existing shortcuts for the user |
 | **Utility** | |
 | `about` | Provides a recap of the bot main information (author, version, links, etc.) |
 | `clear [qty]` | Checks the N last messages and removes those that are command calls or belongs to the bot |
@@ -53,46 +79,36 @@ Quick legend:
 | `setprefix [value]` | Change the `command prefix` at the guild/server level. Needs admin privileges |
 | `settings ?[name=value]*` | Shows the user current settings and allows editing on the fly |
 
-The commands you'll be using the most are: 
-- `roll` to roll the dice
-- `use` to roll the dice using a shortcut
-- `save` to create a new shortcut
-
-Those 3 commands happen to be a bit more complex as they expect a set of **roll instructions** 
-that follows specific rules. We'll go into more detail later on in this document.
-
 
 ### Roll instructions
 
-The `roll`, `use`, and `save` commands are those you'll use the most,
-and all required **roll instructions**. Those instructions are very specific and
-follow a certain set of rules. So, what are they?
+The commands you'll be using the most are `roll`, `use`, and `save`.
+All three expect a set of **roll instructions** that follows specific rules.
+Those instructions can be split into 4 categories
 
-| Name | Status | Description | Example |
+#### Categories
+| Category | Required? | Description | Example |
 | --- | --- | --- | --- |
 | `Dice` | Required (1 or more) | Dice to roll at the start | `3d20` or `1d20 2d6` |
-| `Action` | Optional (1 max) | A specific action applied to your dice | See the list of actions below |
+| `Action` | Optional (1 max) | A specific action applied to your dice | *See the list of actions below* |
 | `Modifier` | Optional (1 max) | A raw number to add/subtract at your final total | `+10` or `-5` |
 | `Check` | Optional (1 max) | Automatically performs the check at the end of the roll | `>10` or `<=15` |
 
-And here's the list of actions:
-
+#### Actions
 | Action | Description | Comment |
 | --- | --- | --- |
 | **Classic** |  |  |
 | `adv` | Rerolls and keeps the best | Usable if rolling only 1 die |
 | `dis` | Rerolls and keeps the worst | Usable if rolling only 1 die |
-| <br/> |  |  |
-| **Keep/Drop X dices** | Example: `5d8 dl3` | Usable only if enough dice and only 1 die type |
+| **Keep/Drop X** | Example: `5d8 dl3` | Usable only if enough dice and only 1 die type |
 | `dh[X]` | Drops the X best dice |  |
 | `dl[X]` | Drops the X worst dice |  |
 | `kh[X]` | Keeps the X best dice |  |
 | `kl[X]` | Keeps the X worst dice |  |
-| <br/> |  |  |
 | **Others** |  |  |
 | `crit` | Double all your original dice | Works with any number of dice. Applied before the `modifier` |
 
-To help you out, here are a few examples:
+#### Examples
 ```bash
 !roll 3d10 # Simply roll 3 die of 10 sides 
 !roll 1d10 adv +5 # Roll 1d10, reroll it and keeps the best, then add 5
