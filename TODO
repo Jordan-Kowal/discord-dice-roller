@@ -6,14 +6,6 @@
 - Add CHANGELOG.md
 - update default error message to say use help or report bug
 
-### Rolling
-- Add option component with settings resolution
-- Add default value for each option
-- Implement `verbose` option, default to `True`
-
-### Settings
-- Add `setoption` [name]
-
 ### Utility
 - Add the `help` command
 

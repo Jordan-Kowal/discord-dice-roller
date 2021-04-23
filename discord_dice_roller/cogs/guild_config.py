@@ -43,7 +43,7 @@ class GuildConfigCog(ImprovedCog):
 
     @setprefix.error
     async def setprefix_error(self, ctx, error):
-        """Base error handler for the !setprefix command"""
+        """Base error handler for the `setprefix` command"""
         await self.log_error_and_apologize(ctx, error)
 
     # ----------------------------------------

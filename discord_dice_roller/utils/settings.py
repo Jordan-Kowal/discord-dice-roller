@@ -9,16 +9,17 @@ from collections import OrderedDict
 # > Global
 # --------------------------------------------------------------------------------
 SETTINGS_FOLDER = os.path.join(os.getcwd(), "settings")
-USER_SHORTCUTS_FILEPATH = os.path.join(SETTINGS_FOLDER, "user_shortcuts.json")
-USER_SETTINGS_FILEPATH = os.path.join(SETTINGS_FOLDER, "user_settings.json")
-GUILD_SETTINGS_FILEPATH = os.path.join(SETTINGS_FOLDER, "guild_settings.json")
 
 
 def init_settings_files():
     """If missing, creates the settings folder and the empty JSON files"""
     if not os.path.exists(SETTINGS_FOLDER):
         os.makedirs(SETTINGS_FOLDER)
-    for path in [GUILD_SETTINGS_FILEPATH, USER_SHORTCUTS_FILEPATH]:
+    for path in [
+        GUILD_SETTINGS_FILEPATH,
+        USER_SHORTCUTS_FILEPATH,
+        USER_SETTINGS_FILEPATH,
+    ]:
         if os.path.exists(path):
             continue
         with open(path, "w") as f:
@@ -58,6 +59,9 @@ def update_key(filepath, key, value):
 # --------------------------------------------------------------------------------
 # > User shortcuts
 # --------------------------------------------------------------------------------
+USER_SHORTCUTS_FILEPATH = os.path.join(SETTINGS_FOLDER, "user_shortcuts.json")
+
+
 def get_user_shortcuts(user_id):
     """
     Gets the user's shortcuts from the JSON file
@@ -80,17 +84,33 @@ def update_user_shortcuts(user_id, user_data):
 # --------------------------------------------------------------------------------
 # > User settings
 # --------------------------------------------------------------------------------
+USER_SETTINGS_FILEPATH = os.path.join(SETTINGS_FOLDER, "user_settings.json")
 DEFAULT_USER_SETTINGS = {"verbose": True}
 
 
 def get_user_settings(user_id):
-    """TBD"""
-    pass
+    """
+    Gets the user's settings from the JSON file
+    :param str user_id: The discord user id as string
+    :return: The user's shortcuts
+    :rtype: dict
+    """
+    return get_key(USER_SETTINGS_FILEPATH, user_id, {})
+
+
+def update_user_settings(user_id, user_data):
+    """
+    Updates the JSON file with the new user's settings (sorted alphabetically)
+    :param str user_id: The discord user id
+    :param dict user_data: The new shortcuts for the user
+    """
+    update_key(USER_SETTINGS_FILEPATH, user_id, user_data)
 
 
 # --------------------------------------------------------------------------------
 # > Guild settings
 # --------------------------------------------------------------------------------
+GUILD_SETTINGS_FILEPATH = os.path.join(SETTINGS_FOLDER, "guild_settings.json")
 DEFAULT_GUILD_SETTINGS = {"prefix": "!"}
 
 

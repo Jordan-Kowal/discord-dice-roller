@@ -40,7 +40,7 @@ class UtilityCog(ImprovedCog):
 
     @info.error
     async def info_error(self, ctx, error):
-        """Base error handler for the !info command"""
+        """Base error handler for the `info` command"""
         await self.log_error_and_apologize(ctx, error)
 
     # ----------------------------------------
@@ -55,7 +55,7 @@ class UtilityCog(ImprovedCog):
 
     @ping.error
     async def ping_error(self, ctx, error):
-        """Base error handler for the !ping command"""
+        """Base error handler for the `ping` command"""
         await self.log_error_and_apologize(ctx, error)
 
     # ----------------------------------------
@@ -91,7 +91,7 @@ class UtilityCog(ImprovedCog):
 
     @clear.error
     async def clear_error(self, ctx, error):
-        """Base error handler for the !clear command"""
+        """Base error handler for the `clear` command"""
         await self.log_error_and_apologize(ctx, error)
 
     def _should_delete(self, msg, ctx):

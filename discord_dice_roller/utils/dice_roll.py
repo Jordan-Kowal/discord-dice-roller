@@ -9,6 +9,7 @@ from discord import Color
 
 # Local
 from .embed import create_embed, create_error_embed
+from .settings import DEFAULT_USER_SETTINGS
 
 # --------------------------------------------------------------------------------
 # > Constants
@@ -120,6 +121,8 @@ class RollModifier(RollComponent):
         Adds a field which indicates the new total after the modifier was applied
         :param Embed embed: The embed massage to update
         """
+        if not self.dice_roll.settings["verbose"]:
+            return
         sign = "+" if self.value > 0 else "-"
         abs_value = abs(self.value)
         previous_total = self.dice_roll.total - self.value
@@ -256,6 +259,8 @@ class Advantage(BaseAction):
         Adds a field with the action result
         :param Embed embed: Embed message to update
         """
+        if not self.dice_roll.settings["verbose"]:
+            return
         if self.die.value > self.existing_die.value:
             result = f"Rolled {self.die.value} and kept it!"
         else:
@@ -299,6 +304,8 @@ class Disadvantage(BaseAction):
         Adds a field with the action result
         :param Embed embed: Embed message to update
         """
+        if not self.dice_roll.settings["verbose"]:
+            return
         if self.die.value < self.existing_die.value:
             result = f"Rolled {self.die.value} and kept it!"
         else:
@@ -331,6 +338,8 @@ class CriticalHit(BaseAction):
         Adds a field indicating the new total
         :param Embed embed: Embed message to update
         """
+        if not self.dice_roll.settings["verbose"]:
+            return
         messages = [
             "All your dice scores are multiplied by 2",
             f"# {self.before_total} x 2 = {self.after_total}",
@@ -401,6 +410,8 @@ class KeepDropAction(BaseAction):
         Adds a field which list the discarded and remaining dice
         :param Embed embed: The embed message to update
         """
+        if not self.dice_roll.settings["verbose"]:
+            return
         remaining_values = [str(die.value) for die in self.remaining_dice]
         discarded_values = [str(die.value) for die in self.discarded_dice]
         messages = [
@@ -440,12 +451,14 @@ class KeepDropAction(BaseAction):
 class DiceRoll:
     """The state and action of rolling dice with various options"""
 
-    def __init__(self, instructions):
+    def __init__(self, instructions, settings):
         """
         Initializes the state, then parses and validates the instructions
         :param [str] instructions: The user's instructions, like "1d6" or "adv"
+        :param dict settings: The settings to use in ths roll
         """
         self.instructions = instructions
+        self.settings = {**DEFAULT_USER_SETTINGS, **settings}
         # Roll parameters
         self.dice = []
         self.modifier = None
@@ -512,8 +525,10 @@ class DiceRoll:
         """
         title = f"You rolled {self.total}"
         embed = create_embed(title=title)
-        self._update_embed_with_dice_rolls(embed)
+        if self.settings["verbose"]:
+            self._update_embed_with_dice_rolls(embed)
         for component in self.components:
+            # "verbose" is handled individually in each component
             component.update_embed(embed)
         return embed
 
@@ -542,10 +557,10 @@ class DiceRoll:
 
     def copy(self):
         """
-        :return: A new DiceRoll using our instance's instructions
+        :return: A new DiceRoll using our instance's instructions and settings
         :rtype: DiceRoll
         """
-        return DiceRoll(self.instructions)
+        return DiceRoll(self.instructions, self.settings)
 
     # ----------------------------------------
     # Helpers: parsing

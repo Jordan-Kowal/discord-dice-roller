@@ -19,7 +19,13 @@ from ..utils.dice_roll import (
     generate_discord_markdown_string,
 )
 from ..utils.embed import create_embed, create_error_embed, create_warning_embed
-from ..utils.settings import get_user_shortcuts, update_user_shortcuts
+from ..utils.settings import (
+    DEFAULT_USER_SETTINGS,
+    get_user_settings,
+    get_user_shortcuts,
+    update_user_settings,
+    update_user_shortcuts,
+)
 
 
 # --------------------------------------------------------------------------------
@@ -29,10 +35,13 @@ class UserConfigCog(ImprovedCog):
     """
     Allows user to customize some settings for themselves
     Provides the following actions:
-        > remove        Deletes an existing shortcut for the user
-        > removeall     Deletes all the shortcuts of the user
-        > save          Creates a shortcut for a group of roll instructions
-        > show          Shows the current shortcuts for the user
+        # Shortcuts
+            > remove            Deletes an existing shortcut for the user
+            > removeall         Deletes all the shortcuts of the user
+            > save              Creates a shortcut for a group of roll instructions
+            > show              Shows the current shortcuts for the user
+        # Settings
+            > settings          Shows the user settings and allows editing on the fly
     """
 
     MAX_SHORTCUTS = 20
@@ -58,7 +67,7 @@ class UserConfigCog(ImprovedCog):
 
     @remove.error
     async def remove_error(self, ctx, error):
-        """Base error handler for the !remove command"""
+        """Base error handler for the `remove` command"""
         await self.log_error_and_apologize(ctx, error)
 
     # ----------------------------------------
@@ -81,7 +90,7 @@ class UserConfigCog(ImprovedCog):
 
     @removeall.error
     async def removeall_error(self, ctx, error):
-        """Base error handler for the !removeall command"""
+        """Base error handler for the `removeall` command"""
         await self.log_error_and_apologize(ctx, error)
 
     # ----------------------------------------
@@ -119,7 +128,7 @@ class UserConfigCog(ImprovedCog):
 
     @save.error
     async def save_error(self, ctx, error):
-        """Base error handler for the !save command"""
+        """Base error handler for the `save` command"""
         await self.log_error_and_apologize(ctx, error)
 
     @staticmethod
@@ -151,7 +160,7 @@ class UserConfigCog(ImprovedCog):
                 "[DiceRoll] Please provide instructions after your shortcut name"
             )
         else:
-            dice_roll = DiceRoll(args)
+            dice_roll = DiceRoll(args, {})
             errors.extend(dice_roll.errors)
         return errors
 
@@ -176,5 +185,85 @@ class UserConfigCog(ImprovedCog):
 
     @show.error
     async def show_error(self, ctx, error):
-        """Base error handler for the !show command"""
+        """Base error handler for the `show` command"""
         await self.log_error_and_apologize(ctx, error)
+
+    # ----------------------------------------
+    # settings
+    # ----------------------------------------
+    @commands.command()
+    async def settings(self, ctx, *args):
+        """Shows the user settings and allows editing on the fly"""
+        self.log_command_call("settings", ctx.message)
+        new_settings, errors = self.maybe_parse_args(args)
+        # We do not allow invalid args
+        if len(errors) > 0:
+            description = "\n".join(errors)
+            embed = create_error_embed(description=description)
+        else:
+            user_id = str(ctx.message.author.id)
+            user_custom_settings = get_user_settings(user_id)
+            # Maybe update settings
+            if len(new_settings.keys()) > 0:
+                new_user_settings = {**user_custom_settings, **new_settings}
+                update_user_settings(user_id, new_user_settings)
+            # No need to re-fetch if updated
+            user_settings = {
+                **DEFAULT_USER_SETTINGS,
+                **user_custom_settings,
+                **new_settings,
+            }
+            description = "\n".join([f"{k}: `{v}`" for k, v in user_settings.items()])
+            embed = create_embed(
+                title="Your current settings are:", description=description
+            )
+        await ctx.send(embed=embed)
+
+    @settings.error
+    async def settings_error(self, ctx, error):
+        """Base error handler for the `settings` command"""
+        await self.log_error_and_apologize(ctx, error)
+
+    @property
+    def available_settings(self):
+        """
+        :return: Dict of option name to their regex values and their converter
+        :rtype: dict
+        """
+        return {"verbose": ("True|False", self.verbose_converter)}
+
+    @staticmethod
+    def verbose_converter(value):
+        """
+        Converts the True/False string into a boolean
+        :param str value: Expecting "True" or "False"
+        :return: The boolean value
+        :rtype: bool
+        """
+        return False if value == "False" else True
+
+    def maybe_parse_args(self, args):
+        """
+        Checks each extra argument and either maps it to a new setting value or adds an error
+        :param [str] args: Extra instructions given by the users
+        :return: The new settings and the error list
+        :rtype: dict, [str]
+        """
+        errors = []
+        updates = {}
+        for arg in args:
+            matched = False
+            for name, (values, converter) in self.available_settings.items():
+                regex = re.compile(f"(?P<name>{name})=(?P<value>{values})")
+                match = re.fullmatch(regex, arg)
+                if match is None:
+                    continue
+                name = match.group("name")
+                value = converter(match.group("value"))
+                updates[name] = value
+                matched = True
+                break
+            if not matched:
+                message = f"[Instruction] This instruction is invalid: `{arg}`"
+                errors.append(message)
+        return updates, errors
