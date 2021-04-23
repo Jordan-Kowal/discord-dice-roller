@@ -87,6 +87,7 @@ All three expect a set of **roll instructions** that follows specific rules.
 Those instructions can be split into 4 categories
 
 #### Categories
+
 | Category | Required? | Description | Example |
 | --- | --- | --- | --- |
 | `Dice` | Required (1 or more) | Dice to roll at the start | `3d20` or `1d20 2d6` |
@@ -95,6 +96,7 @@ Those instructions can be split into 4 categories
 | `Check` | Optional (1 max) | Automatically performs the check at the end of the roll | `>10` or `<=15` |
 
 #### Actions
+
 | Action | Description | Comment |
 | --- | --- | --- |
 | **Classic** |  |  |
@@ -109,6 +111,7 @@ Those instructions can be split into 4 categories
 | `crit` | Double all your original dice | Works with any number of dice. Applied before the `modifier` |
 
 #### Examples
+
 ```bash
 !roll 3d10 # Simply roll 3 die of 10 sides 
 !roll 1d10 adv +5 # Roll 1d10, reroll it and keeps the best, then add 5
