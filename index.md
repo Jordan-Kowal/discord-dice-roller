@@ -35,7 +35,7 @@ $setprefix !  # Because you changed your mind
 
 TODO: Add screenshots
 
-### Invite the bot
+### **Invite the bot**
 
 First, you need to add the bot to your guild(s). To do so, simply click 
 [this link](https://discord.com/api/oauth2/authorize?client_id=831199138364129281&permissions=76800&scope=bot)
@@ -49,7 +49,7 @@ and choose which guild/server you want it to join. This link includes the bot's 
 | **Read Message History** | Same reason as **Manage Messages** |
 
 
-### Command list
+### **Command list**
 
 First, let's see which commands are available. 
 They have been grouped by category to make it easier to read. 
@@ -80,7 +80,7 @@ As for the `parameter` legend:
 | `settings ?[name=value]*` | Shows the user current settings and allows editing on the fly |
 
 
-### Roll instructions
+### **Roll instructions**
 
 The commands you'll be using the most are `roll`, `use`, and `save`.
 All three expect a set of **roll instructions** that follows specific rules.
@@ -122,7 +122,7 @@ Those instructions can be split into 4 categories
 ```
 
 
-### Settings
+### **Settings**
 
 The `settings` command is a bit special as it allows you to both see and set your settings.
 - If you want to view your settings: `!settings`
@@ -135,7 +135,7 @@ Here are the available settings:
 | **verbose** | `True`  | Makes the output of `roll` and `use` more detailed |
 
 
-### Found a bug?
+### **Found a bug?**
 
 You can report any potential issue 
 directly on the [GitHub repository](https://github.com/Jordan-Kowal/discord-dice-roller/issues)
