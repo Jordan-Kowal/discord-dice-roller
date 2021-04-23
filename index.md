@@ -1,6 +1,6 @@
-## Welcome to the user guide
+## **Welcome to the user guide**
 
-### Summary
+### **Summary**
 - [A short command story](#a-short-command-story)
 - [Invite the bot](#invite-the-bot)
 - [Command list](#command-list)
@@ -12,7 +12,7 @@
 - [Found a bug?](#found-a-bug?)
 
 
-### A short command story
+### **A short command story**
 
 ```bash
 @DiceRoller  # Get the bot prefix on your server. Defaults to !
