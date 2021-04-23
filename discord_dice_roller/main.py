@@ -23,7 +23,7 @@ if __name__ == "__main__":
     setup_logging()
     init_settings_files()
     # Bot setup
-    bot = commands.Bot(command_prefix=get_command_prefix)
+    bot = commands.Bot(command_prefix=get_command_prefix, help_command=None)
     for cog_class in [DiceRollingCog, GuildConfigCog, UserConfigCog, UtilityCog]:
         bot.add_cog(cog_class(bot))
     # Execute

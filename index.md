@@ -72,7 +72,7 @@ As for the `parameter` legend:
 | **Utility** | |
 | `about` | Provides a recap of the bot main information (author, version, links, etc.) |
 | `clear [qty]` | Checks the N last messages and removes those that are command calls or belongs to the bot |
-| `help` | Provides a link that redirects you to the official documentation |
+| `help` | List all the existing commands and provides some helpful links |
 | `ping` | Simply checks if the bot is up and running |
 | `@DiceRoller` | Mention him to know what `command prefix` he responds to |
 | **Settings** | |

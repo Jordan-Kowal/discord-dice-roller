@@ -10,6 +10,47 @@ from discord.ext import commands
 from utils.cog import ImprovedCog
 from utils.embed import create_embed, create_error_embed
 
+# --------------------------------------------------------------------------------
+# > Constants
+# --------------------------------------------------------------------------------
+HELP_TEXT = """```yaml
+# Rolling dice
+reroll                           Rolls the dice using the same settings as the user's last valid dice roll
+roll [instruction]*              Rolls the dice using the provided instructions
+use [shortcut] ?[instruction]*   Rolls the dice using a user's shortcut and maybe additional instructions
+
+# Shortcut management
+remove [shortcut]                Removes one specific shortcut for the user
+removeall                        Removes all of the user's shortcuts
+save [shortcut] [instruction]*   Creates a new shortcut mapped to those instructions for the user
+show                             Shows the list of existing shortcuts for the user
+
+# Utility
+about                            Provides a recap of the bot main information
+clear [qty]                      Checks the N last messages and removes those that are command calls or belongs to the bot
+help                             Shows THIS message
+ping                             Simply checks if the bot is up and running
+@DiceRoller                      Mention him to know what command prefix he responds to
+
+# Settings
+setprefix [value]                Change the command prefix at the guild/server level. Needs admin privileges
+settings ?[name=value]*          Shows the user current settings and allows editing on the fly
+```"""
+
+MORE_INFO_TEXT = """
+For more details, checkout those links:
+- [Commands](https://jordan-kowal.github.io/discord-dice-roller/#command-list)
+- [Roll instructions](https://jordan-kowal.github.io/discord-dice-roller/#roll-instructions)
+- [Settings](https://jordan-kowal.github.io/discord-dice-roller/#settings)
+"""
+
+ABOUT_TEXT = """
+Author: **Jordan Kowal**
+Version: **`1.0`**
+Useful Links: **[Official Page](https://jordan-kowal.github.io/discord-dice-roller/)** || \
+**[GitHub repository](https://github.com/Jordan-Kowal/discord-dice-roller)**
+"""
+
 
 # --------------------------------------------------------------------------------
 # > Cog
@@ -29,18 +70,28 @@ class UtilityCog(ImprovedCog):
     async def about(self, ctx):
         """Provides a recap of the bot information"""
         self.log_command_call("about", ctx.message)
-        lines = [
-            "Author: **Jordan Kowal**",
-            "Version: **`1.0`**",
-            "Useful Links: **[Official Page](https://jordan-kowal.github.io/discord-dice-roller/)** || \
-            **[GitHub repository](https://github.com/Jordan-Kowal/discord-dice-roller)**",
-        ]
-        embed = create_embed(description="\n".join(lines))
+        embed = create_embed(description=ABOUT_TEXT)
         await ctx.send(embed=embed)
 
     @about.error
     async def about_error(self, ctx, error):
         """Base error handler for the `about` command"""
+        await self.log_error_and_apologize(ctx, error)
+
+    # ----------------------------------------
+    # help
+    # ----------------------------------------
+    @commands.command()
+    async def help(self, ctx):
+        """Checks if the bot is up"""
+        self.log_command_call("help", ctx.message)
+        await ctx.send(HELP_TEXT)
+        embed_output = create_embed(description=MORE_INFO_TEXT)
+        await ctx.send(embed=embed_output)
+
+    @help.error
+    async def help_error(self, ctx, error):
+        """Base error handler for the `help` command"""
         await self.log_error_and_apologize(ctx, error)
 
     # ----------------------------------------
@@ -50,7 +101,7 @@ class UtilityCog(ImprovedCog):
     async def ping(self, ctx):
         """Checks if the bot is up"""
         self.log_command_call("ping", ctx.message)
-        embed_output = create_embed(title="pong")
+        embed_output = create_embed(description="pong")
         await ctx.send(embed=embed_output)
 
     @ping.error

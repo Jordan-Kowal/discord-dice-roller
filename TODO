@@ -5,10 +5,6 @@
 - [ ] Add a `CHANGELOG.md`
 
 ### General
-- Setup docker-compose for easy setup
 - Update README.md
 - Update GitHub logo, bot avatar, and thumbnail
 - Add screenshots in the official page
-
-### Utility
-- Add the `help` command
