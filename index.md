@@ -33,7 +33,7 @@ $setprefix !  # Because you changed your mind
 !about  # Because you care about my work
 ```
 
-TODO: Add screenshots
+![Output examples](assets/Examples.png)
 
 ### **Invite the bot**
 

@@ -9,7 +9,7 @@ import discord
 # --------------------------------------------------------------------------------
 def create_embed(**kwargs):
     """
-    Creates an embed with a default type, color, and thumbnail
+    Creates an embed with a default type and color
     :param kwargs: Standard discord.Embed kwargs
     :return: A preset discord Embed
     :rtype: Embed
@@ -17,7 +17,6 @@ def create_embed(**kwargs):
     kwargs.setdefault("type", "rich")
     kwargs.setdefault("color", discord.Color.blue())
     embed = discord.Embed(**kwargs)
-    # embed.set_thumbnail(url="attachment://assets/DiceRollerCut.png")
     return embed
 
 
