@@ -3,7 +3,3 @@
 - [ ] Replace JSON settings with database for better performance
 - [ ] Add `top.gg` link in the `about` output
 - [ ] Add a `CHANGELOG.md`
-
-### General
-- Update GitHub logo, bot avatar, and thumbnail
-- Add screenshots in the official page
