@@ -46,7 +46,7 @@ For more details, checkout those links:
 
 ABOUT_TEXT = """
 Author: **Jordan Kowal**
-Version: **`1.0.0`**
+Version: **`v1.0.0`**
 Useful Links: **[Official Page](https://jordan-kowal.github.io/discord-dice-roller/)** || \
 **[GitHub repository](https://github.com/Jordan-Kowal/discord-dice-roller)**
 """
