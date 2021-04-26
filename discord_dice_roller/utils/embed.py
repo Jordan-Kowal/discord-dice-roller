@@ -17,7 +17,7 @@ def create_embed(**kwargs):
     kwargs.setdefault("type", "rich")
     kwargs.setdefault("color", discord.Color.blue())
     embed = discord.Embed(**kwargs)
-    embed.set_thumbnail(url="https://i.imgur.com/Nn2JKQI.png")
+    # embed.set_thumbnail(url="attachment://assets/DiceRollerCut.png")
     return embed
 
 
